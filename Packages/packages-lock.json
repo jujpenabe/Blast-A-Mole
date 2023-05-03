@@ -1,5 +1,19 @@
 {
   "dependencies": {
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "305695ad5d194dda0d6b00777c2459202a1ef4ea"
+    },
+    "com.unidi.unidi": {
+      "version": "https://github.com/UniDi/UniDi.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "9d84a2e5711d16ad44ea4cf04d03dad4b143d5e5"
+    },
     "com.unity.collab-proxy": {
       "version": "2.0.3",
       "depth": 0,
