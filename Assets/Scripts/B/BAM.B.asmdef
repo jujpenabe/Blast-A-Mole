@@ -1,0 +1,20 @@
+{
+    "name": "BAM.B",
+    "rootNamespace": "",
+    "references": [
+        "GUID:0fa3b8b4562fb801a9cd21f1d8957305"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "EmbeddedLinux",
+        "WebGL"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
