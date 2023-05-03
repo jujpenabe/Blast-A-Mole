@@ -70,6 +70,9 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+<<<<<<< HEAD
 
 # VisualStudioCode
 .vscode/*
+=======
+>>>>>>> 3b7dfea6ee6d179cb45a717acc903973300f5dcf
