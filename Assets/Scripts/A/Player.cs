@@ -4,5 +4,6 @@ namespace BAM.A
     public class Player
     {
         public int Health { get; set; }
+        public int Score { get; set; }
     }
 }
