@@ -15,7 +15,7 @@ namespace BAM.C
         // Planet's spots
         [SerializeField] private GameObject[] _spots = new GameObject[10];
         // Moles to spawn on wave
-        [SerializeField] private int _molesToPool = 5;
+        [SerializeField] private int _molesToPool;
         // Moles model prefab
         [SerializeField] private GameObject _molePrefab;
         // Moles pool
@@ -37,51 +37,50 @@ namespace BAM.C
             var disposable = _usecase.Score.Subscribe((score) => _score.Value = score);
             scoreUseCase.Score.Subscribe(score => _score.Value = score);
         }
-        private void Awake()
-        {
-            // Instantiate Moles for pool
-            for (int i = 0; i < _spots.Length; i++)
-            {
-                GameObject mole = Instantiate(Resources.Load("Prefabs/Mole")) as GameObject;
-                mole.transform.SetParent(_spots[i].transform);
-                mole.transform.localPosition = Vector3.zero;
-                mole.transform.localScale = Vector3.one;
-                mole.SetActive(false);
-            }
-        }
         private void Start()
         {
-            _molesPool = new List<GameObject>();
-            GameObject tmp;
-            // Fill pool with moles
-            for (int i = 0; i < _molesToPool; i++)
-            {
-                tmp = Instantiate(_molePrefab);
-                tmp.SetActive(false);
-                _molesPool.Add(tmp);
-            }
+            _molesToPool = _spots.Length;
+            _molesPool = FillPool(_molesToPool, _molePrefab);
 
             IObservable<Unit> update = this.UpdateAsObservable();
 
             update.Subscribe(_ => HandleRotation());
 
-            
+            StartCoroutine(SpawnMole());
+
         }
 
-        public GameObject GetMoleFromPool()
+        private List<GameObject> FillPool(int amount, GameObject prefab)
         {
-            for (int i = 0; i < _molesPool.Count; i++)
+            List<GameObject> pool = new List<GameObject>();
+            GameObject tmp;
+            // Fill pool with moles
+            for (int i = 0; i < amount; i++)
             {
-                if (!_molesPool[i].activeInHierarchy)
+                tmp = Instantiate(prefab);
+                tmp.SetActive(false);
+                pool.Add(tmp);
+            }
+            return pool;
+        }
+
+        private GameObject GetObjectFromPool(List<GameObject> pool)
+        {
+            for (int i = 0; i < pool.Count; i++)
+            {
+                if (!pool[i].activeInHierarchy)
                 {
-                    return _molesPool[i];
+                    return pool[i];
                 }
             }
             return null;
         }
         private void HandleRotation()
         {   
-            transform.Rotate(new Vector3(_rotationSpeed * Time.deltaTime, 0, _rotationSpeed * Time.deltaTime));
+            // Rotate planet in local Z axis
+            transform.Rotate(new Vector3(0, 0, _rotationSpeed * Time.deltaTime));
+
+            // transform.Rotate(new Vector3(_rotationSpeed * Time.deltaTime, 0, _rotationSpeed * Time.deltaTime));
         }
         
         private IEnumerator SpawnMole()
@@ -102,9 +101,13 @@ namespace BAM.C
                     // Get random spot
                     int spot = UnityEngine.Random.Range(0, _spots.Length);
                     // Get mole from pool
-                    GameObject mole = GetMoleFromPool();
+                    GameObject mole = GetObjectFromPool(_molesPool);
                     // Set mole position to spot
                     mole.transform.position = _spots[spot].transform.position;
+                    // Spot as a class and be responnsable for orientation and gameobject
+                    
+                    // Set parent to spot
+                    mole.transform.SetParent(_spots[spot].transform);
                     // Activate mole
                     mole.SetActive(true);
                     // Wait between 0.5 and 1.5 seconds
