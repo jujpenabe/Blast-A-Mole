@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using BAM.B;
 using Reflex.Core;
 using UnityEngine;
 
@@ -13,6 +14,10 @@ namespace BAM
 
             // Add Instances
             descriptor.AddInstance("Hello World!");
+            var score = new ScoreUsecase();
+
+            // Add Bindings
+            descriptor.AddInstance(score,typeof(IScoreUsecase));
         }
     }
 }
