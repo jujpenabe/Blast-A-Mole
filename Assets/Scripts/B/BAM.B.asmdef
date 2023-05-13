@@ -2,7 +2,8 @@
     "name": "BAM.B",
     "rootNamespace": "BAM",
     "references": [
-        "GUID:0fa3b8b4562fb801a9cd21f1d8957305"
+        "GUID:0fa3b8b4562fb801a9cd21f1d8957305",
+        "GUID:560b04d1a97f54a4e82edc0cbbb69285"
     ],
     "includePlatforms": [
         "Editor",

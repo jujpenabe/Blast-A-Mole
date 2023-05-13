@@ -1,18 +1,18 @@
 {
   "dependencies": {
+    "com.gustavopsantos.reflex": {
+      "version": "https://github.com/gustavopsantos/reflex.git?path=/Assets/Reflex/#4.1.3",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b2750b5538244069751750a43d370f62357c68c7"
+    },
     "com.tsk.ide.vscode": {
       "version": "https://github.com/Chizaruu/com.tsk.ide.vscode.git#upm",
       "depth": 0,
       "source": "git",
       "dependencies": {},
       "hash": "e5cdc06b6afb978fb4b531e8a7edd8b44e4e947c"
-    },
-    "com.unidi.unidi": {
-      "version": "https://github.com/UniDi/UniDi.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "9d84a2e5711d16ad44ea4cf04d03dad4b143d5e5"
     },
     "com.unity.collab-proxy": {
       "version": "2.0.3",
