@@ -16,6 +16,10 @@ namespace BAM.C
         [SerializeField] private HoleInstantiator[] _spots = new HoleInstantiator[10]; //Spot = Hole
         // Moles model prefab
         [SerializeField] private GameObject _molePrefab;
+
+        [SerializeField] private bool _gameOver = false;
+
+        [SerializeField] private Transform _spawnReference;
         // Moles pool
         List<GameObject> _molesPool;
 
@@ -42,6 +46,9 @@ namespace BAM.C
             IObservable<Unit> update = this.UpdateAsObservable();
 
             update.Subscribe(_ => HandleRotation());
+            // Subscribe to function to check if time is up
+            update.Subscribe(_ => HandleTime());
+
             StartCoroutine(SpawnWave()); // Move to usecase
         }
         private List<GameObject> FillPool(int amount, GameObject prefab)
@@ -74,19 +81,32 @@ namespace BAM.C
 
             // transform.Rotate(new Vector3(_rotationSpeed * Time.deltaTime, 0, _rotationSpeed * Time.deltaTime));
         }
+        
+        private void HandleTime()
+        {
+            // If time is up, game over
+            if (Time.timeSinceLevelLoad >= 120f)
+            {
+                _gameOver = true;
+            }
+        }
         private IEnumerator SpawnWave()
         {
-            yield return new WaitForSeconds(3f);
+            // Wait 3 seconds before starting the game
+            yield return new WaitForSeconds(1f);
             // Game loop
-            while (true)
+            while (!_gameOver)
             {
-                yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 3f));
+                
                 int molesToSpawn = UnityEngine.Random.Range(1 , 4 );
-        
-                SortArrayByDistanceToPoint(_spots, Camera.main.transform.position);
+
                 // Get the first molesToSpawn element of _spots and save on a new temporary array
-                var tempHoles = new HoleInstantiator[molesToSpawn];
-                Array.Copy(_spots, tempHoles, molesToSpawn);
+                // Increase range of spawnable holes, double the amount of moles to spawn
+                int spawnRange = molesToSpawn * 2;
+                var tempHoles = new HoleInstantiator[spawnRange];
+                
+                SortArrayByDistanceToPoint(_spots, _spawnReference.position);
+                Array.Copy(_spots, tempHoles, spawnRange);
 
                 for (int i = 0; i < molesToSpawn; i++)
                 {
@@ -96,17 +116,18 @@ namespace BAM.C
                     while (tempHoles[randomSpot].GetSpawnable() != null)
                     {
                         randomSpot = UnityEngine.Random.Range(0, tempHoles.Length);
+                        yield return null;
                     }
-                    var tempHole = tempHoles[randomSpot];  // Refactor
+                    
                     // Get mole from pool and set it to hole
                     GameObject mole = GetObjectFromPool(_molesPool);
                     // Wait if there are no moles available
                     while (mole == null)
                     {
-                        yield return new WaitForSeconds(0.5f);
-                        Debug.Log("Waiting for moles, Pool is empty");
+                        yield return new WaitForSeconds(1f);
                         mole = GetObjectFromPool(_molesPool);
                     }
+                    var tempHole = tempHoles[randomSpot];  // Refactor
                     tempHole.SetSpawnable(mole);
                     tempHole.LookAt(transform.position);
                     tempHole.Spawn();
@@ -117,23 +138,32 @@ namespace BAM.C
                 // Wait until all moles are inactive
                 while (!AreAllObjectsInactive(_molesPool))
                 {
+                    
                     yield return new WaitForSeconds(1f);
                 }
+                ResetAllInstantiators(_spots);
+                yield return new WaitForSeconds(UnityEngine.Random.Range(1f, 3f));
             }
+            yield return null;
         }
         private bool AreAllObjectsInactive(List<GameObject> pool)
         {
             for (int i = 0; i < pool.Count; i++)
             {
-                if (pool[i].activeInHierarchy)
+                if (pool[i].activeSelf)
                 {
                     return false;
                 }
             }
-            Debug.Log("All objects inactive");
             return true;
         }
-        
+        private void ResetAllInstantiators(HoleInstantiator[] instantiators)
+        {
+            for (int i = 0; i < instantiators.Length; i++)
+            {
+                instantiators[i].SetSpawnable(null);
+            }
+        }
         private void SortArrayByDistanceToPoint(MonoBehaviour[] arr, Vector3 position)
         {
             Array.Sort(arr, (a, b) => Vector3.Distance(a.transform.position, position).CompareTo(Vector3.Distance(b.transform.position, position)));
