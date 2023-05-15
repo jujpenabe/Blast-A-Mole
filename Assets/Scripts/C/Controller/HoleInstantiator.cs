@@ -6,12 +6,23 @@ namespace BAM
 {
     public class HoleInstantiator : MonoBehaviour, IInstantiator
     {
-        private GameObject _spawnable;
-        private Quaternion _lookRotation = Quaternion.identity;
+        private GameObject _spawnable = null;
+        //private Quaternion _lookRotation = Quaternion.identity;
 
 
         public Vector3 Position { get => transform.position; set => transform.position = value; }
 
+        // Constructor Method
+        public HoleInstantiator(GameObject spawnable)
+        {
+            _spawnable = spawnable;
+        }
+
+        // Constructor method null spawnable
+        public HoleInstantiator()
+        {
+            _spawnable = null;
+        }
         public object GetSpawnable()
         {
             return _spawnable;
@@ -27,15 +38,15 @@ namespace BAM
             _spawnable.transform.position = transform.position;
 
             _spawnable.transform.SetParent(transform);
-            _spawnable.transform.rotation = _lookRotation;
-            _spawnable.transform.Rotate(new Vector3(90, 0, 0)); // Fix rotation
-            // Activate spawnable instead of instantiating
+            _spawnable.transform.rotation = transform.rotation;
+            //_spawnable.transform.Rotate(new Vector3(-30, 0, 0)); // Fix rotation
             _spawnable.SetActive(true);
         }
 
         public void LookAt(Vector3 pivot)
         {
-            _lookRotation = Quaternion.LookRotation(transform.position - pivot);
+            transform.rotation = Quaternion.LookRotation(transform.position - pivot);
+            //_lookRotation = Quaternion.LookRotation(transform.position - pivot);
         }
     }
 }
