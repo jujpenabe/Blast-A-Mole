@@ -1,6 +1,6 @@
 using System;
 
-namespace BAM
+namespace BAM.B
 {
 	public interface IInstantiator
 	{
