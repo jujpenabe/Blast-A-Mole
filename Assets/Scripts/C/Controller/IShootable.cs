@@ -14,6 +14,11 @@ namespace BAM.B
 			get;
 			set;
 		}
-		void Shoot(Vector3 direction, float speed);
+		int Power
+		{
+			get;
+			set;
+		}
+		void Shoot(Vector3 direction, float speed, int power);
 	}
 }

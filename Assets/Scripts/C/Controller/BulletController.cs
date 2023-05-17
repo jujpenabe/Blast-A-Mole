@@ -19,6 +19,9 @@ namespace BAM
         public Vector3 Direction { get => _direction; set => _direction = value; }
         private float _speed;
         public float Speed { get => _speed; set => _speed = value; }
+        private int _power;
+        public int Power { get => _power; set => _power = value; }
+
         private void Awake()
         {
             updateAsObservable = this.UpdateAsObservable();
@@ -29,10 +32,11 @@ namespace BAM
             transform.Translate(_direction * (_speed * Time.deltaTime));
         }
 
-        public void Shoot(Vector3 direction, float speed)
+        public void Shoot(Vector3 direction, float speed, int power)
         {
             updateAsObservable.Subscribe(_ => HandleMovement());
             _speed = speed;
+            _power = power;
             _direction = direction.normalized;
         }
     }
