@@ -1,6 +1,6 @@
 {
     "name": "BAM.D",
-    "rootNamespace": "",
+    "rootNamespace": "BAM",
     "references": [
         "GUID:bab222a1692c0551b9965f09368c3663"
     ],

@@ -1,6 +1,6 @@
 {
     "name": "BAM.A",
-    "rootNamespace": "",
+    "rootNamespace": "BAM",
     "references": [],
     "includePlatforms": [
         "Editor",

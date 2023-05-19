@@ -26,6 +26,12 @@
 # Visual Studio cache directory
 .vs/
 
+# Omnisharp
+omnisharp*
+
+# Idea Jetbrains
+.idea/
+
 # Gradle cache directory
 .gradle/
 
@@ -54,6 +60,7 @@ ExportedObj/
 
 # Unity3D generated file on crash reports
 sysinfo.txt
+mono_crash*
 
 # Builds
 *.apk
@@ -74,6 +81,7 @@ crashlytics-build.properties
 <<<<<<< HEAD
 
 # VisualStudioCode
+*code-workspace
 .vscode/*
 =======
 >>>>>>> 3b7dfea6ee6d179cb45a717acc903973300f5dcf
