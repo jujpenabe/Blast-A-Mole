@@ -38,6 +38,8 @@ namespace BAM
             _speed = speed;
             _power = power;
             _direction = direction.normalized;
+            // destroy after 3 secs
+            Destroy(gameObject, 3f);
         }
     }
 }
