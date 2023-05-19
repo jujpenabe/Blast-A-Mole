@@ -5,6 +5,7 @@ using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
 using BAM.B;
+using DG.Tweening;
 
 namespace BAM.C
 {
@@ -17,7 +18,6 @@ namespace BAM.C
         // Moles model prefab
         [SerializeField] private GameObject _molePrefab;
 
-        [SerializeField] private bool _gameOver = false;
 
         [SerializeField] private Transform _spawnReference;
         // Moles pool
@@ -44,6 +44,12 @@ namespace BAM.C
             _molesPool = FillPool(_spots.Length, _molePrefab);
 
             IObservable<Unit> update = this.UpdateAsObservable();
+
+            // Do tween rotate 330 degrees in x axis in 2 seconds smoothly
+            transform.DORotate(new Vector3(330f, 0f, 0f), 2f, RotateMode.FastBeyond360).SetEase(Ease.Linear).OnComplete(() => {
+                // Un child _spawnreference
+                _spawnReference.parent = null;
+            });
 
             update.Subscribe(_ => HandleRotation());
             // Subscribe to function to check if time is up
@@ -76,26 +82,23 @@ namespace BAM.C
         }
         private void HandleRotation()
         {   
-            // Rotate planet in local Z axis
+            // Rotate on local z axis
             transform.Rotate(new Vector3(0, 0, _rotationSpeed * Time.deltaTime));
-
-            // transform.Rotate(new Vector3(_rotationSpeed * Time.deltaTime, 0, _rotationSpeed * Time.deltaTime));
         }
         
         private void HandleTime()
         {
-            // If time is up, game over
             if (Time.timeSinceLevelLoad >= 120f)
             {
-                _gameOver = true;
+                GameManager.S_Instance.SwitchState(GameManager.GameState.GameOver);
             }
         }
         private IEnumerator SpawnWave()
         {
             // Wait 3 seconds before starting the game
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(3f);
             // Game loop
-            while (!_gameOver)
+            while (GameManager.S_Instance.currentGameState != GameManager.GameState.GameOver)
             {
                 
                 int molesToSpawn = UnityEngine.Random.Range(1 , 4 );

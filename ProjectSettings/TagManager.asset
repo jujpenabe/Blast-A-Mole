@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Mole
+  - Bullet
   layers:
   - Default
   - TransparentFX
