@@ -47,7 +47,6 @@ namespace BAM.C
         }
         private void OnDestroy()
         {
-            Debug.Log("Banner destroyed");
             GameManager.S_Instance.SwitchState(_gameStateToSwitchTo);
         }
     }
