@@ -105,7 +105,7 @@ namespace BAM.C
 
                 // Get the first molesToSpawn element of _spots and save on a new temporary array
                 // Increase range of spawnable holes, double the amount of moles to spawn
-                int spawnRange = molesToSpawn * 2;
+                int spawnRange = (molesToSpawn * 2) - 1;
                 var tempHoles = new HoleInstantiator[spawnRange];
                 
                 SortArrayByDistanceToPoint(_spots, _spawnReference.position);
@@ -141,7 +141,6 @@ namespace BAM.C
                 // Wait until all moles are inactive
                 while (!AreAllObjectsInactive(_molesPool))
                 {
-                    
                     yield return new WaitForSeconds(1f);
                 }
                 ResetAllInstantiators(_spots);

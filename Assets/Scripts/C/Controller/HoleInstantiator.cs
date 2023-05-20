@@ -36,12 +36,11 @@ namespace BAM
 
         public void Spawn()
         {
+            _spawnable.SetActive(true);
             _spawnable.transform.position = transform.position;
-
             _spawnable.transform.SetParent(transform);
             _spawnable.transform.rotation = transform.rotation;
             //_spawnable.transform.Rotate(new Vector3(-30, 0, 0)); // Fix rotation
-            _spawnable.SetActive(true);
         }
 
         public void LookAt(Vector3 pivot)
