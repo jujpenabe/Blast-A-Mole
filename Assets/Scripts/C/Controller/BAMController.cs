@@ -51,7 +51,7 @@ namespace BAM.C
                     
                     Sequence sequence = DOTween.Sequence();
                     // Insert a scale tween and on complete switch
-                    sequence.Insert(0, transform.DOLocalRotate(new Vector3(180f, 0f, 0f), 0.5f));
+                    sequence.Insert(0, transform.DOLocalRotate(new Vector3(270f, 0f, 0f), 0.5f));
                     sequence.Insert(0, _material.DOFade(0f, 0.5f));
                     sequence.Insert(0,transform.DOScale(0f, 1f).OnComplete(()=> {
                         Destroy(gameObject, 2f);
