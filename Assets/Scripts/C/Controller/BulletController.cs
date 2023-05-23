@@ -39,7 +39,13 @@ namespace BAM
             _power = power;
             _direction = direction.normalized;
             // destroy after 3 secs
-            Destroy(gameObject, 3f);
+            DeactivateAfterSeconds(3f);
+        }
+
+        private IEnumerator DeactivateAfterSeconds(float seconds)
+        {
+            yield return new WaitForSeconds(seconds);
+            gameObject.SetActive(false);
         }
     }
 }

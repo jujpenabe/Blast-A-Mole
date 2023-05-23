@@ -43,8 +43,8 @@ namespace BAM.C
         {
             // Reduce health
             _health--;
-            // Destroy bullet
-            Destroy(other.gameObject);
+            // Deactivate bullet
+            other.gameObject.SetActive(false);
             if (_health <= 0)
             {
                 //DOTween.KillAll();

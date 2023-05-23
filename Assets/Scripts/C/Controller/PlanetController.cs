@@ -21,7 +21,7 @@ namespace BAM.C
 
         [SerializeField] private Transform _spawnReference;
         // Moles pool
-        List<GameObject> _molesPool;
+        private List<GameObject> _molesPool;
 
         public IReadOnlyReactiveProperty<int> Score => _score;
         private readonly ReactiveProperty<int> _score = new ReactiveProperty<int>(0);
