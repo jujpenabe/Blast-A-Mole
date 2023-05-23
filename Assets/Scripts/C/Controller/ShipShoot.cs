@@ -9,8 +9,9 @@ namespace BAM.C
     public class ShipShoot : MonoBehaviour
     {
         // Prefab of bullet
-        public BulletController BulletPrefab;
-        private BulletController _bullet;
+        [SerializeField]
+        private BulletController _bulletPrefab;
+        private List<GameObject> _bulletPool;
         [SerializeField] private float _fireRate = 0.2f;
         private float _lastShot = 0;
         // Position of bullet spawn
@@ -27,7 +28,8 @@ namespace BAM.C
         private Vector3 _localScale;
         private void Start()
         {
-            _bullet = BulletPrefab;
+            _bulletPool = FillPool(5, _bulletPrefab.gameObject);
+            _bulletPrefab = BulletPrefab;
             _localScale = transform.localScale;
         }
         private void Update()
@@ -40,30 +42,35 @@ namespace BAM.C
             if (Input.GetKey(KeyCode.Space))
             {
                 if (!_instantiated) {
-                    _bullet = Instantiate( BulletPrefab, _bulletSpawn.position, Quaternion.identity);
-                    _bullet.transform.SetParent(transform);
-                    _bullet.transform.DOShakePosition(_bulletRadioIncreaseRate, new Vector3(0.05f / _localScale.x, 0f / _localScale.y, 0.05f / _localScale.z) * _bulletSizeRatio , 10, 50, false, true).SetLoops(-1, LoopType.Yoyo);
-                    _instantiated = true;
+                    GameObject _bullet = GetObjectFromPool(_bulletPool);
+                    if (_bullet != null) {
+                        _bullet.transform.position = _bulletSpawn.position;
+                        _bullet.transform.rotation = _bulletSpawn.rotation; // Or identity
+                        _bullet.transform.SetParent(transform);
+                        _bullet.transform.DOShakePosition(_bulletRadioIncreaseRate, new Vector3(0.05f / _localScale.x, 0f / _localScale.y, 0.05f / _localScale.z) * _bulletSizeRatio , 10, 50, false, true).SetLoops(-1, LoopType.Yoyo);
+                        _bullet.SetActive(true);
+                        _instantiated = true;
+                    }
                 }
-                _bullet.transform.position = _bulletSpawn.position;
+                _bulletPrefab.transform.position = _bulletSpawn.position;
                 _elapsedTime += Time.deltaTime;
                 if (_elapsedTime >= _bulletRadioIncreaseRate && _bulletSizeRatio < 2 )
                 {
                     _bulletSizeRatio+=0.5f;
                     _elapsedTime = 0;
                     _bulletPower++;
-                    _bullet.transform.DOScale(new Vector3(1 / _localScale.x, 1 / _localScale.y, 1 / _localScale.z) * _bulletSizeRatio, _bulletRadioIncreaseRate * 0.5f).SetEase(Ease.OutBounce);
+                    _bulletPrefab.transform.DOScale(new Vector3(1 / _localScale.x, 1 / _localScale.y, 1 / _localScale.z) * _bulletSizeRatio, _bulletRadioIncreaseRate * 0.5f).SetEase(Ease.OutBounce);
                 }
                 // Shake bullet based on force
             }
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 if (!_instantiated) return;
-                _bullet.transform.DOKill();
-                _bullet.transform.parent = null;
+                _bulletPrefab.transform.DOKill();
+                _bulletPrefab.transform.parent = null;
                 _lastShot = Time.time;
                 _elapsedTime = 0;
-                _bullet.Shoot(Vector3.forward, _bulletSpeed + (_bulletSizeRatio * 0.2f), _bulletPower);
+                _bulletPrefab.Shoot(Vector3.forward, _bulletSpeed + (_bulletSizeRatio * 0.2f), _bulletPower);
                 _instantiated = false;
                 _bulletSizeRatio = 1;
                 _bulletPower = 1;
@@ -76,5 +83,29 @@ namespace BAM.C
             return true;
         }
 
+        private List<GameObject> FillPool(int amount, GameObject prefab)
+        {
+            List<GameObject> pool = new List<GameObject>();
+            GameObject tmp;
+            for (int i = 0; i < amount; i++)
+            {
+                tmp = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+                tmp.SetActive(false);
+                pool.Add(tmp);
+            }
+            return pool;
+        }
+
+        private GameObject GetObjectFromPool(List<GameObject> pool)
+        {
+            for (int i = 0; i < pool.Count; i++)
+            {
+                if (!pool[i].activeInHierarchy)
+                {
+                    return pool[i];
+                }
+            }
+            return null;
+        }
     }
 }
