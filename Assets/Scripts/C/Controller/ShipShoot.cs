@@ -37,7 +37,7 @@ namespace BAM.C
             {
 
             }
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.Mouse0) || Input.GetKey(KeyCode.UpArrow))
             {
                 if (!_instantiated) {
                     _bullet = Instantiate( BulletPrefab, _bulletSpawn.position, Quaternion.identity);
@@ -56,7 +56,7 @@ namespace BAM.C
                 }
                 // Shake bullet based on force
             }
-            if (Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.Mouse0) || Input.GetKeyUp(KeyCode.UpArrow))
             {
                 if (!_instantiated) return;
                 _bullet.transform.DOKill();

@@ -9,7 +9,6 @@ namespace BAM.C
 {
     public class PlayerController : MonoBehaviour
     {
-        [SerializeField] private KeyCode[] _keys = new KeyCode[3];
         [SerializeField] private GameObject[] _spots = new GameObject[3];
         [SerializeField] private float _lerpDuration = 0.2f;
         private float _timeElapsed = 0;
@@ -20,24 +19,38 @@ namespace BAM.C
         {
             // Set current spot to first spot
             _currentSpot = _spots[0].transform;
-            _targetSpot = _spots[0].transform;
+            _targetSpot = _spots[4].transform; 
             // Replace Update() with UniRx UpdateAsObservable()
             IObservable<Unit> update = this.UpdateAsObservable();
 
             // Movement
             update.Subscribe(_ => HandleMovement());
+            // change lerp duration momentarily
+            var lerpDuration = _lerpDuration;
+            _lerpDuration = 4.4f;
+            // Lerp to position
+            LerpToSpot(_targetSpot);
+            // change lerp duration back to normal
+            _lerpDuration = lerpDuration;
         }
 
         private void HandleMovement()
         {
-            // Get input from keyboard for three spots
-            for (int i = 0; i < _keys.Length; i++)
-            {   
-                if (Input.GetKeyDown(_keys[i])){
-                    _targetSpot = _spots[i].transform;
-                    _timeElapsed = 0;
-                    break;
-                }
+
+            // If pressing Q | A or left arrow 
+            if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow)){
+                _targetSpot = _spots[1].transform;
+                _timeElapsed = 0;
+            }
+            // If pressing W | S or down arrow
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.DownArrow)){
+                _targetSpot = _spots[2].transform;
+                _timeElapsed = 0;
+            }
+            // If pressing E | D or right arrow
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow)){
+                _targetSpot = _spots[3].transform;
+                _timeElapsed = 0;
             }
             // Move to spot
             LerpToSpot(_targetSpot);

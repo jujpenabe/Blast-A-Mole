@@ -27,13 +27,13 @@ namespace BAM.C
             sequence.Insert(0, transform.DOShakePosition(0.3f, new Vector3(0.04f, 0.04f, 0), 10, 50, false, true));
             sequence.Insert(0.5f, transform.DOLocalMoveZ(0.3f, 1f));
             // rotate 30 degrees on local x axis
-            sequence.Insert(1f, transform.DOLocalRotate(new Vector3(-30, 0, 0), 1f, RotateMode.Fast));
+            sequence.Insert(2f, transform.DOLocalRotate(new Vector3(-30, 0, 0), 1f, RotateMode.Fast));
             
             // Move back to original position
-            sequence.Insert(1.7f + random, transform.DOShakeRotation(1f, new Vector3(0, 0, 120), 1, 90, true)); // Angle also based on health
-            sequence.Insert(2.9f + random, transform.DOShakePosition(0.3f, new Vector3(0.02f, 0.02f, 0), 10, 50, false, true));
-            sequence.Insert(3.2f + random, transform.DOLocalRotate(new Vector3(0, 0, 0), 1f, RotateMode.Fast));
-            sequence.Insert(3.4f + random, transform.DOLocalMoveZ(-1, 2f).OnComplete(() => {
+            sequence.Insert(1.5f + random, transform.DOShakeRotation(1f, new Vector3(0, 0, 120), 1, 90, true)); // Angle also based on health
+            sequence.Insert(2.5f + random, transform.DOShakePosition(0.3f, new Vector3(0.02f, 0.02f, 0), 10, 50, false, true));
+            sequence.Insert(3.0f + random, transform.DOLocalRotate(new Vector3(0, 0, 0), 1f, RotateMode.Fast));
+            sequence.Insert(3.5f + random, transform.DOLocalMoveZ(-1, 2f).OnComplete(() => {
                 this.gameObject.SetActive(false);
                 //sequence.Rewind();
                 }));

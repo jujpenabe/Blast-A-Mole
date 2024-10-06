@@ -88,7 +88,7 @@ namespace BAM.C
         
         private void HandleTime()
         {
-            if (Time.timeSinceLevelLoad >= 120f)
+            if (Time.timeSinceLevelLoad >= 60f)
             {
                 GameManager.S_Instance.SwitchState(GameManager.GameState.GameOver);
             }
@@ -135,8 +135,8 @@ namespace BAM.C
                     tempHole.LookAt(transform.position);
                     tempHole.Spawn();
                     
-                    // Wait between 0.5 and 1.5 seconds
-                    yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 1.5f));
+                    // Wait between 0.5 and 2 seconds
+                    yield return new WaitForSeconds(UnityEngine.Random.Range(0.5f, 2f));
                 }
                 // Wait until all moles are inactive
                 while (!AreAllObjectsInactive(_molesPool))
